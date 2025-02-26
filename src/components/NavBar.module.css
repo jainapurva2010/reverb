@@ -27,4 +27,17 @@
   .link:hover {
     color: #1db954; /* Spotify Green */
   }
+
+  .logoutButton {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .logoutButton:hover {
+    color: #ff4d4d; /* Red on hover */
+  }
   

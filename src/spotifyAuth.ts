@@ -20,3 +20,10 @@ export const getSpotifyToken = () => {
 
   return token;
 };
+
+export const logoutFromSpotify = (navigate: (path: string) => void) => {
+  // Remove the token from local storage or URL
+  window.location.hash = ""; // Clears the token from the URL
+  navigate("/login"); // Redirects user to home page
+};
+
