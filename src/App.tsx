@@ -1,18 +1,15 @@
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
 import Album from "./pages/Album";
 import Profile from "./pages/Profile";
+import NavBar from "./components/NavBar";
 
 const App: React.FC = () => {
   return (
     <div>
-      <nav>
-        <Link to="/">Home</Link> | <Link to="/search">Search</Link> |{" "}
-        <Link to="/profile">Profile</Link>
-      </nav>
-
+      <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<Search />} />

@@ -1,0 +1,30 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #1e1e1e; /* Dark theme */
+    color: white;
+    font-size: 18px;
+  }
+  
+  .logo {
+    font-weight: bold;
+    font-size: 20px;
+  }
+  
+  .links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .link {
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+  }
+  
+  .link:hover {
+    color: #1db954; /* Spotify Green */
+  }
+  
