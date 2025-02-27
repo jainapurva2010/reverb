@@ -12,9 +12,9 @@ const NavBar: React.FC<NavBarProps> = ({ user, spotifyProfile }) => {
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.logo}>🎵 Reverb</div>
+      <Link to="/" className={`${styles.logo} ${styles.noLinkStyle}`}>🎵 Reverb</Link>
+
       <div className={styles.navLinks}>
-        <Link to="/" className={styles.link}>Home</Link>
         <Link to="/search" className={styles.link}>Search</Link>
       </div>
 
