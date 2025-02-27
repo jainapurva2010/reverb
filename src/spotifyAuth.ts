@@ -1,13 +1,22 @@
-import axios from "axios";
-
-const CLIENT_ID = "8723d4814d08440b84abc2f3f021f5fc";
-const REDIRECT_URI = "http://localhost:5173/callback";
-const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
-const RESPONSE_TYPE = "code";
-const SCOPES = "user-read-private user-read-email";
+import axios, { AxiosError} from "axios";
 
 export const loginWithSpotify = () => {
-  window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=${RESPONSE_TYPE}&scope=${encodeURIComponent(SCOPES)}`;};
+  console.log("🚀 loginWithSpotify() triggered!");
+
+  const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
+  const CLIENT_ID = "8723d4814d08440b84abc2f3f021f5fc";
+  const REDIRECT_URI = "http://localhost:5173/callback"; 
+  const RESPONSE_TYPE = "code";
+  const SCOPES = "user-read-private user-read-email";
+
+  const authUrl = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
+    REDIRECT_URI
+  )}&response_type=${RESPONSE_TYPE}&scope=${encodeURIComponent(SCOPES)}`;
+
+  console.log("🔗 Redirecting to Spotify Auth URL:", authUrl);
+
+  window.location.href = authUrl;
+};
 
 export const getSpotifyToken = () => {
   const hash = window.location.hash;
@@ -29,18 +38,26 @@ export const getSpotifyToken = () => {
 export const exchangeCodeForTokens = async (code: string) => {
   try {
     const response = await axios.post("http://localhost:3001/auth/spotify", { code });
-    const { access_token, refresh_token, expires_in } = response.data;
 
-    localStorage.setItem("spotify_token", access_token);
-    localStorage.setItem("spotify_refresh_token", refresh_token);
-    localStorage.setItem("spotify_token_expiry", (Date.now() + expires_in * 1000).toString());
+    if (response.data.access_token) {
+      const { access_token, refresh_token, expires_in } = response.data;
 
-    return access_token;
-  } catch (error) {
-    console.error("Failed to exchange code for tokens", error);
+      localStorage.setItem("spotify_token", access_token);
+      localStorage.setItem("spotify_refresh_token", refresh_token);
+      localStorage.setItem("spotify_token_expiry", (Date.now() + expires_in * 1000).toString());
+
+      return access_token;
+    } else {
+      console.error("❌ Token exchange response missing access_token.");
+      return null;
+    }
+  } catch (err: unknown) {
+    const error = err as AxiosError;
+    console.error("❌ Failed to exchange code for tokens:", error.response?.data || error.message);
     return null;
   }
 };
+
 
 export const refreshSpotifyToken = async () => {
   const refresh_token = localStorage.getItem("spotify_refresh_token");
@@ -56,7 +73,7 @@ export const refreshSpotifyToken = async () => {
 
     return access_token;
   } catch (error) {
-    console.error("Failed to refresh Spotify token", error);
+    console.error("❌ Failed to refresh Spotify token", error);
     return null;
   }
 };

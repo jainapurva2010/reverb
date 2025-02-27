@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./NavBar.module.css";
+import { getSpotifyToken } from "../spotifyAuth";
 
 interface NavBarProps {
   user: any;
@@ -9,6 +10,19 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ user, spotifyProfile }) => {
   const navigate = useNavigate();
+  const [spotifyToken, setSpotifyToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkToken = () => {
+      console.log("🔄 Checking Spotify token...");
+      setSpotifyToken(getSpotifyToken());
+    };
+
+    checkToken(); // Run on mount
+    const interval = setInterval(checkToken, 1000); // 🚀 Check every second
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <nav className={styles.navbar}>
@@ -19,7 +33,7 @@ const NavBar: React.FC<NavBarProps> = ({ user, spotifyProfile }) => {
       </div>
 
       <div className={styles.userSection}>
-        {user || spotifyProfile ? (
+        {user || spotifyProfile || spotifyToken ? (
           <div className={styles.userInfo} onClick={() => navigate("/profile")}>
             {user && (
               <>
