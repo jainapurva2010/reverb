@@ -11,22 +11,22 @@ export const loginWithSpotify = () => {
 
 export const getSpotifyToken = () => {
   const hash = window.location.hash;
-  let token = null;
+  let token = localStorage.getItem("spotify_token");
 
-  if (hash) {
+  if (hash.includes("access_token")) {
     const params = new URLSearchParams(hash.substring(1));
     token = params.get("access_token");
 
     if (token) {
-      localStorage.setItem("spotify_token", token); // Store token in local storage
+      localStorage.setItem("spotify_token", token); 
+      window.history.replaceState(null, "", window.location.pathname); 
     }
   }
 
-  return token || localStorage.getItem("spotify_token"); // Return token from URL or localStorage;
+  return token;
 };
 
 export const logoutFromSpotify = (navigate: (path: string) => void) => {
-  // Remove the token from local storage or URL
   window.location.hash = ""; // Clears the token from the URL
   localStorage.removeItem("spotify_token"); // Clear stored token
   navigate("/login"); // Redirects user to home page
