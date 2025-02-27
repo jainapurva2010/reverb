@@ -15,6 +15,7 @@
   
   .links {
     display: flex;
+    align-items: center;
     gap: 20px;
   }
   
@@ -39,5 +40,19 @@
   
   .logoutButton:hover {
     color: #ff4d4d; /* Red on hover */
+  }
+
+  .userInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+  }
+
+  .profilePic {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
   }
   
