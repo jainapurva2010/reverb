@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { auth, logout } from "../firebaseConfig";
-import { getSpotifyToken, logoutFromSpotify } from "../spotifyAuth";
+import { auth } from "../firebaseConfig";
+import { getSpotifyToken } from "../spotifyAuth";
 import styles from "./NavBar.module.css"; 
 import axios from "axios";
 
@@ -39,47 +39,41 @@ const NavBar: React.FC = () => {
     }
   }, [spotifyToken]);
 
-  const handleLogout = async () => {
-    await logout(); // Logs out Google
-    logoutFromSpotify(navigate); // Logs out Spotify and redirects
-
-    setUser(null);
-    setSpotifyToken(null);
-    setSpotifyProfile(null);
-  };
-
   return (
     <nav className={styles.navbar}>
       <div className={styles.logo}>🎵 Reverb</div>
-      <div className={styles.links}>
+      <div className={styles.navLinks}>
         <Link to="/" className={styles.link}>Home</Link>
         <Link to="/search" className={styles.link}>Search</Link>
-        <Link to="/profile" className={styles.link}>Profile</Link>
       </div>
 
-      {/* Show user info if logged in */}
-      {user && (
-        <div className={styles.userInfo}>
-          <img src={user.photoURL} alt="Profile" className={styles.profilePic} />
-          <span>{user.displayName}</span>
-        </div>
-      )}
+      <div className={styles.userSection}>
+        {user || spotifyProfile ? (
+          // User is logged in -> Show profile info
+          <div className={styles.userInfo} onClick={() => navigate("/profile")}>
+            {user && (
+              <>
+                <img src={user.photoURL} alt="Profile" className={styles.profilePic} />
+                <span>{user.displayName}</span>
+              </>
+            )}
 
-      {spotifyProfile && !user && (
-        <div className={styles.userInfo}>
-          {spotifyProfile.images.length > 0 && (
-            <img src={spotifyProfile.images[0].url} alt="Spotify Profile" className={styles.profilePic} />
-          )}
-          <span>{spotifyProfile.display_name}</span>
-        </div>
-      )}
-
-      {/* Show "Login" if no user is logged in, else show "Logout" */}
-      {!user && !spotifyToken ? (
-        <Link to="/login" className={styles.link}>Log In</Link>
-      ) : (
-        <button onClick={handleLogout} className={styles.logoutButton}>Log Out</button>
-      )}
+            {spotifyProfile && !user && (
+              <>
+                {spotifyProfile.images.length > 0 && (
+                  <img src={spotifyProfile.images[0].url} alt="Spotify Profile" className={styles.profilePic} />
+                )}
+                <span>{spotifyProfile.display_name}</span>
+              </>
+            )}
+          </div>
+        ) : (
+          // No user logged in -> Show Log In button
+          <button className={styles.loginButton} onClick={() => navigate("/login")}>
+            Log In
+          </button>
+        )}
+      </div>
     </nav>
   );
 };
