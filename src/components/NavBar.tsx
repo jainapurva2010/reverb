@@ -1,57 +1,58 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import styles from "./NavBar.module.css";
-import { getSpotifyToken } from "../spotifyAuth";
+import { useAuthStore } from "../store/useAuthStore";
 
-interface NavBarProps {
-  user: any;
-  spotifyProfile: any;
-}
-
-const NavBar: React.FC<NavBarProps> = ({ user, spotifyProfile }) => {
+const NavBar: React.FC = () => {
   const navigate = useNavigate();
-  const [spotifyToken, setSpotifyToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    const checkToken = () => {
-      console.log("🔄 Checking Spotify token...");
-      setSpotifyToken(getSpotifyToken());
-    };
-
-    checkToken(); // Run on mount
-    const interval = setInterval(checkToken, 1000); // 🚀 Check every second
-
-    return () => clearInterval(interval);
-  }, []);
+  
+  // Get global auth state from Zustand
+  const { user, spotifyToken, spotifyProfile } = useAuthStore();
 
   return (
     <nav className={styles.navbar}>
-      <Link to="/" className={`${styles.logo} ${styles.noLinkStyle}`}>🎵 Reverb</Link>
+      {/* The logo is a clickable Link that navigates to "/" */}
+      <Link to="/" className={`${styles.logo} ${styles.noLinkStyle}`}>
+        🎵 Reverb
+      </Link>
 
       <div className={styles.navLinks}>
+        {/* Navigation links */}
         <Link to="/search" className={styles.link}>Search</Link>
       </div>
 
       <div className={styles.userSection}>
+        {/* If a user is logged in (Google or Spotify), display their info */}
         {user || spotifyProfile || spotifyToken ? (
           <div className={styles.userInfo} onClick={() => navigate("/profile")}>
-            {user && (
+            {user ? (
               <>
-                <img src={user.photoURL ?? "https://via.placeholder.com/32"} alt="Profile" className={styles.profilePic} />
+                <img 
+                  src={user.photoURL ?? "https://via.placeholder.com/32"} 
+                  alt="Profile" 
+                  className={styles.profilePic} 
+                />
                 <span>{user.displayName}</span>
               </>
-            )}
-            {spotifyProfile && !user && (
+            ) : spotifyProfile ? (
               <>
                 {spotifyProfile.images.length > 0 && (
-                  <img src={spotifyProfile.images[0].url} alt="Spotify Profile" className={styles.profilePic} />
+                  <img 
+                    src={spotifyProfile.images[0].url} 
+                    alt="Spotify Profile" 
+                    className={styles.profilePic} 
+                  />
                 )}
                 <span>{spotifyProfile.display_name}</span>
               </>
-            )}
+            ) : null}
           </div>
         ) : (
-          <button className={styles.loginButton} onClick={() => navigate("/login")}>
+          // Otherwise, show the "Log In" button
+          <button 
+            className={styles.loginButton} 
+            onClick={() => navigate("/login")}
+          >
             Log In
           </button>
         )}

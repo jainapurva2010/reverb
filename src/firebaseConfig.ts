@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 
-// Your Firebase configuration (replace with your Firebase credentials)
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBXWJo1upC59s68Dw_9EPjBg3tjqWvxWv0",
   authDomain: "reverb-a3702.firebaseapp.com",
@@ -16,7 +16,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
-// Google Sign-In Function
+/**
+ * Sign in with Google using a popup.
+ */
 export const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
@@ -26,7 +28,9 @@ export const signInWithGoogle = async () => {
   }
 };
 
-// Google Sign-Out Function
+/**
+ * Sign out the current user.
+ */
 export const logout = async () => {
   try {
     await signOut(auth);

@@ -1,40 +1,26 @@
-import React, { useEffect, useState }  from "react";
-import { signInWithGoogle, auth } from "../firebaseConfig";
-import { loginWithSpotify, getSpotifyToken } from "../spotifyAuth";
+import React, { useEffect } from "react";
+import { signInWithGoogle } from "../firebaseConfig";
+import { loginWithSpotify } from "../spotifyAuth";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/useAuthStore";
 
 const Login: React.FC = () => {
-  const [user, setUser] = useState<any>(null);
-  const [spotifyToken, setSpotifyToken] = useState<string | null>(null);
   const navigate = useNavigate();
+  // Retrieve authentication state from the Zustand store
+  const { user, spotifyToken } = useAuthStore();
 
   useEffect(() => {
-
-    // Check if user is logged in with Google
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
-    });
-
-    // Check if user is logged in with Spotify
-    const token = getSpotifyToken();
-    setSpotifyToken(token);
-
-    return () => unsubscribe();
-
-  }, []);
-
-  // If user is already logged in, redirect to home
-  useEffect(() => {
+    // If user is already logged in (Google or Spotify), redirect to home page
     if (user || spotifyToken) {
-      navigate("/"); // Redirect to home if logged in
+      navigate("/", { replace: true });
     }
   }, [user, spotifyToken, navigate]);
 
   return (
     <div>
       <h1>Sign In to Reverb</h1>
-      {/* Show login buttons only if user is NOT logged in */}
-      {!user && !spotifyToken ? (
+      {/* Render login buttons only if no user is logged in */}
+      {!(user || spotifyToken) ? (
         <>
           <button onClick={signInWithGoogle}>Sign in with Google</button>
           <button onClick={loginWithSpotify}>Sign in with Spotify</button>

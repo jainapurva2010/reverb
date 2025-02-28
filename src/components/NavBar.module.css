@@ -1,90 +1,87 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: #1e1e1e; /* Dark theme */
-    color: white;
-    font-size: 18px;
-  }
-  
-  .logo {
-    font-weight: bold;
-    font-size: 20px;
-    color: white; 
-    text-decoration: none; 
-    cursor: pointer;
-  }
-  
-  .noLinkStyle {
-    color: inherit; 
-    text-decoration: none; 
-  }
-  
-  .navLinks {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #1e1e1e; /* Dark theme */
+  color: white;
+  font-size: 18px;
+}
 
-  .link {
-    text-decoration: none;
-    color: white;
-    transition: color 0.3s ease;
-  }
-  
-  .link:hover {
-    color: #1db954; /* Spotify Green */
-  }
+.logo {
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
 
-  .userSection {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer; /* Makes it clear this is clickable */
-  }
+.noLinkStyle {
+  color: inherit;
+  text-decoration: none;
+}
 
-  .userInfo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: white;
-  }
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
 
-  .profilePic {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
+.link {
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s ease;
+}
 
-  .loginButton {
-    background-color: #1db954; /* Spotify Green */
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .loginButton:hover {
-    background-color: #1aa34a; /* Darker green on hover */
-  }
+.link:hover {
+  color: #1db954; /* Spotify Green */
+}
 
-  .logoutButton {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
-  
-  .logoutButton:hover {
-    color: #ff4d4d; /* Red on hover */
-  }
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer; /* Indicates it's clickable */
+}
 
-  
-  
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+}
+
+.profilePic {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.loginButton {
+  background-color: #1db954; /* Spotify Green */
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.loginButton:hover {
+  background-color: #1aa34a; /* Darker green on hover */
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.logoutButton:hover {
+  color: #ff4d4d; /* Red on hover */
+}

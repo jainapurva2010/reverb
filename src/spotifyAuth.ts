@@ -1,5 +1,8 @@
 import axios, { AxiosError} from "axios";
 
+/**
+ * Redirects the user to Spotify's authorization endpoint.
+ */
 export const loginWithSpotify = () => {
   console.log("🚀 loginWithSpotify() triggered!");
 
@@ -14,10 +17,14 @@ export const loginWithSpotify = () => {
   )}&response_type=${RESPONSE_TYPE}&scope=${encodeURIComponent(SCOPES)}`;
 
   console.log("🔗 Redirecting to Spotify Auth URL:", authUrl);
-
   window.location.href = authUrl;
 };
 
+/**
+ * Retrieves the Spotify access token from localStorage or from the URL hash.
+ * If the token is found in the URL hash, it is stored in localStorage and the URL is cleaned.
+ * @returns {string | null} The Spotify access token or null if not found.
+ */
 export const getSpotifyToken = () => {
   const hash = window.location.hash;
   let token = localStorage.getItem("spotify_token");
@@ -28,15 +35,23 @@ export const getSpotifyToken = () => {
 
     if (token) {
       localStorage.setItem("spotify_token", token); 
+      // Clean the URL to remove token parameters without reloading the page
       window.history.replaceState(null, "", window.location.pathname); 
     }
   }
-
   return token;
 };
 
-export const exchangeCodeForTokens = async (code: string) => {
+/**
+ * Exchanges an authorization code for Spotify access and refresh tokens.
+ * On success, stores the tokens and expiry time in localStorage.
+ * @param code - The authorization code from Spotify.
+ * @returns {Promise<string | null>} The access token if successful, or null if failed.
+ */
+export const exchangeCodeForTokens = async (code: string): Promise<string | null> => {
   try {
+    console.log("🚀 Sending authorization code to backend:", code);
+
     const response = await axios.post("http://localhost:3001/auth/spotify", { code });
 
     if (response.data.access_token) {
@@ -58,10 +73,13 @@ export const exchangeCodeForTokens = async (code: string) => {
   }
 };
 
-
-export const refreshSpotifyToken = async () => {
+/**
+ * Refreshes the Spotify access token using the stored refresh token.
+ * Updates the stored access token and expiry time in localStorage.
+ * @returns {Promise<string | null>} The new access token if successful, or null if failed.
+ */
+export const refreshSpotifyToken = async (): Promise<string | null> => {
   const refresh_token = localStorage.getItem("spotify_refresh_token");
-
   if (!refresh_token) return null;
 
   try {
@@ -78,9 +96,15 @@ export const refreshSpotifyToken = async () => {
   }
 };
 
-export const logoutFromSpotify = (navigate: (path: string) => void) => {
-  window.location.hash = ""; // Clears the token from the URL
-  localStorage.removeItem("spotify_token"); // Clear stored token
-  navigate("/login"); // Redirects user to home page
+/**
+ * Logs out the Spotify user by clearing tokens from localStorage and redirecting to the login page.
+ * @param navigate - A function to navigate to a specified route.
+ */
+export const logoutFromSpotify = (navigate: (path: string) => void): void => {
+  window.location.hash = ""; // Clears any token parameters from the URL
+  localStorage.removeItem("spotify_token");
+  localStorage.removeItem("spotify_refresh_token");
+  localStorage.removeItem("spotify_token_expiry");
+  navigate("/login"); 
 };
 
