@@ -32,7 +32,11 @@ const App: React.FC = () => {
 
     // Firebase authentication check
     const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
-      setUser(firebaseUser);
+      if (firebaseUser) {
+        setUser(firebaseUser);
+      } else {
+        setUser(null); // Ensures state resets when logging out
+      }
       firebaseResolved = true;
       if (firebaseResolved && spotifyResolved && !authInitialized) {
         setAuthInitialized(true);
